@@ -1,4 +1,4 @@
-package com.example.data.impl.di
+package com.example.moviesapp.di
 
 import com.example.common.di.CommonProvider
 import com.example.data.api.DataProvider
@@ -7,11 +7,12 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [
-        DataModule::class
-    ],
     dependencies = [
-        CommonProvider::class
+        CommonProvider::class,
+        DataProvider::class
+    ],
+    modules = [
+        NavigationModule::class
     ]
 )
-interface DataComponent: DataProvider
+interface AppComponent: AppProvider

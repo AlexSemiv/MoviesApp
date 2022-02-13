@@ -8,8 +8,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.common.di.LocalCommonProvider
+import com.example.data.api.LocalDataProvider
+import com.example.moviesapp.di.LocalAppProvider
+import com.example.moviesapp.ui.Movies
 import com.example.moviesapp.ui.theme.MoviesAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +22,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MoviesAppTheme {
-
+                Surface(
+                    color = MaterialTheme.colors.background,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CompositionLocalProvider(
+                        LocalAppProvider provides application.appProvider,
+                        LocalDataProvider provides application.appProvider,
+                        LocalCommonProvider provides application.appProvider
+                    ) {
+                        Movies()
+                    }
+                }
             }
         }
     }

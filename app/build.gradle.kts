@@ -49,6 +49,7 @@ android {
 
 dependencies {
 
+    implementation(project(":auth:impl"))
     implementation(project(":data:impl"))
     implementation(project(":common"))
 
@@ -72,4 +73,13 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Compose.composeVersion}")
     debugImplementation("androidx.compose.ui:ui-tooling:${Compose.composeVersion}")
+
+    implementation("androidx.compose.ui:ui:${Compose.composeVersion}")
+    implementation("androidx.compose.material:material:${Compose.composeVersion}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${Compose.composeVersion}")
+    implementation("androidx.navigation:navigation-compose:${Compose.navigationComposeVersion}")
+
+    implementation("com.google.dagger:dagger-android:${Versions.daggerVersion}")
+    kapt("com.google.dagger:dagger-android-processor:${Versions.daggerVersion}")
+    kapt("com.google.dagger:dagger-compiler:${Versions.daggerVersion}")
 }
