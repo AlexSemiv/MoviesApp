@@ -11,7 +11,7 @@ import javax.inject.Singleton
         DataModule::class
     ],
     dependencies = [
-        CommonProvider::class
+
     ]
 )
 interface DataComponent: DataProvider

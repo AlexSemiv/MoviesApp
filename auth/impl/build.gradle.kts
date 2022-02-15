@@ -57,6 +57,8 @@ dependencies {
     implementation("androidx.compose.material:material:${Compose.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Compose.composeVersion}")
     implementation("androidx.navigation:navigation-compose:${Compose.navigationComposeVersion}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${Compose.composeVersion}")
+    implementation("androidx.compose.material:material-icons-extended:${Compose.composeVersion}")
 
     implementation("com.google.dagger:dagger-android:${Versions.daggerVersion}")
     kapt("com.google.dagger:dagger-android-processor:${Versions.daggerVersion}")

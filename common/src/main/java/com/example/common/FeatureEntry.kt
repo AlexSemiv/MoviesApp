@@ -20,7 +20,15 @@ interface FeatureEntry {
         get() = emptyList()
 }
 
+/**
+ * Interface that describe
+ * a single composable entry point
+ */
 interface ComposableFeatureEntry: FeatureEntry {
+
+    /**
+     * Analog of standard composable fun
+     */
     fun NavGraphBuilder.composable(
         navController: NavController,
         destinations: Destinations
@@ -38,6 +46,9 @@ interface ComposableFeatureEntry: FeatureEntry {
         }
     }
 
+    /**
+     * Realization of feature screen
+     */
     @Composable
     fun NavGraphBuilder.Composable(
         navController: NavController,
@@ -46,6 +57,10 @@ interface ComposableFeatureEntry: FeatureEntry {
     )
 }
 
+/**
+ * Interface that describe
+ * nested composable nav graph
+ */
 interface AggregateFeatureEntry : FeatureEntry {
 
     fun NavGraphBuilder.navigation(
@@ -54,7 +69,9 @@ interface AggregateFeatureEntry : FeatureEntry {
     )
 }
 
-
+/**
+ * Get instance of destination
+ */
 inline fun <reified T : FeatureEntry> Destinations.find(): T =
     findOrNull() ?: error("Unable to find '${T::class.java}' destination.")
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in_welcome">"Welcome back!"</string>
+    <string name="sign_in_button">Sign in</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+</resources>

@@ -8,8 +8,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     dependencies = [
-        CommonProvider::class,
-        DataProvider::class
+
     ],
     modules = [
         NavigationModule::class

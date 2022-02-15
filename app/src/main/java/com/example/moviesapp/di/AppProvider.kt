@@ -5,7 +5,7 @@ import com.example.common.Destinations
 import com.example.common.di.CommonProvider
 import com.example.data.api.DataProvider
 
-interface AppProvider: DataProvider, CommonProvider {
+interface AppProvider {
     val destinations: Destinations
 }
 
