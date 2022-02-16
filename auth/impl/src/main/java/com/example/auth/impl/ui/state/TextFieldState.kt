@@ -5,16 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 
-open class TextFieldState(
-    private val validator: (String) -> Boolean = { true },
-    private val errorMessage: (String) -> String
-) {
+abstract class TextFieldState {
     var text by mutableStateOf("")
     var error by mutableStateOf<String?>(null)
+
+    abstract fun isTextValid(text: String): Boolean
+    abstract fun errorMessage(unputText: String): String
 
     fun validate() {
         error = if(isValid() || text.isEmpty()) null else errorMessage(text)
     }
 
-    fun isValid() = validator(text)
+    fun isValid() = isTextValid(text)
 }

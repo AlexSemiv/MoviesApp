@@ -1,5 +1,7 @@
 package com.example.auth.impl.contract
 
+import com.example.auth.impl.ui.state.PasswordState
+import com.example.auth.impl.ui.state.UsernameState
 import com.example.common.domain.UiEffect
 import com.example.common.domain.UiEvent
 import com.example.common.domain.UiState
@@ -9,8 +11,14 @@ object AuthContract {
 
     sealed class Event: UiEvent {
         data class OnAuthSubmit(
-            val login: String,
+            val username: String,
             val password: String
+        ): Event()
+        data class OnUsernameEntering(
+            val text: String
+        ): Event()
+        data class OnPasswordEntering(
+            val text: String
         ): Event()
     }
 
@@ -28,6 +36,8 @@ object AuthContract {
     }
 
     data class State(
-        val authState: AuthState
+        val authState: AuthState,
+        val usernameState: UsernameState,
+        val passwordState: PasswordState
     ): UiState
 }

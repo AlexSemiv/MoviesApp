@@ -14,12 +14,13 @@ import com.example.auth.impl.R
 
 @Composable
 fun SignInButton(
-    isEnabled: Boolean
+    isEnabled: Boolean,
+    onClick: () -> Unit
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth(),
-        onClick = { /*TODO*/ },
+        onClick = { onClick() },
         contentPadding = PaddingValues(16.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Blue,

@@ -1,10 +1,11 @@
 package com.example.auth.impl.ui.state
 
-class PasswordState: TextFieldState(
-    validator = ::isPasswordValid,
-    errorMessage = { passwordErrorMessage() }
-)
+class PasswordState: TextFieldState() {
+    override fun isTextValid(text: String): Boolean {
+        return text.length >= 5 && text.isNotBlank()
+    }
 
-fun isPasswordValid(password: String) = (password.length >= 5 && password.isNotBlank())
-
-fun passwordErrorMessage() = "Password is invalid."
+    override fun errorMessage(unputText: String): String {
+        return "Password is invalid."
+    }
+}

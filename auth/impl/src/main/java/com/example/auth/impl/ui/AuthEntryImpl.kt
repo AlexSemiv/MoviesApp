@@ -9,7 +9,6 @@ import androidx.navigation.NavGraphBuilder
 import com.example.auth.api.AuthEntry
 import com.example.auth.impl.di.DaggerAuthComponent
 import com.example.auth.impl.ui.components.AuthScreen
-import com.example.auth.impl.ui.components.LoadingAuthScreen
 import com.example.common.Destinations
 import com.example.common.di.injectedViewModel
 import com.example.data.api.LocalDataProvider
@@ -31,7 +30,8 @@ class AuthEntryImpl @Inject constructor(): AuthEntry() {
         }
 
         AuthScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            viewModel = viewModel
         )
     }
 }

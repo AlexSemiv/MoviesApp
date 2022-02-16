@@ -1,4 +1,4 @@
-package com.example.auth.impl.ui
+package com.example.auth.impl.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box

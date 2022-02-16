@@ -1,10 +1,11 @@
 package com.example.auth.impl.ui.state
 
-class UsernameState : TextFieldState(
-    validator = ::isUsernameValid,
-    errorMessage = { usernameErrorMessage() }
-)
+class UsernameState : TextFieldState() {
+    override fun isTextValid(text: String): Boolean {
+        return text.isNotBlank()
+    }
 
-fun isUsernameValid(username: String) = username.isNotBlank()
-
-fun usernameErrorMessage() = "Username is invalid."
+    override fun errorMessage(unputText: String): String {
+        return "Username is invalid."
+    }
+}

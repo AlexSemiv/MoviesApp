@@ -2,6 +2,8 @@ package com.example.auth.impl.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.example.auth.impl.contract.AuthContract
+import com.example.auth.impl.ui.state.PasswordState
+import com.example.auth.impl.ui.state.UsernameState
 import com.example.common.di.annotation.FeatureScoped
 import com.example.auth.impl.usecase.CreateSession
 import com.example.common.domain.BaseViewModel
@@ -21,7 +23,9 @@ class AuthenticationViewModel @Inject constructor(
 
     override fun createInitialUiState(): AuthContract.State {
         return AuthContract.State(
-            authState = AuthContract.AuthState.Idle
+            authState = AuthContract.AuthState.Idle,
+            usernameState = UsernameState(),
+            passwordState = PasswordState()
         )
     }
 
@@ -29,9 +33,29 @@ class AuthenticationViewModel @Inject constructor(
         when (event) {
             is AuthContract.Event.OnAuthSubmit -> {
                 loginUser(
-                    username = event.login,
+                    username = event.username,
                     password = event.password
                 )
+            }
+            is AuthContract.Event.OnUsernameEntering -> {
+                setState {
+                    copy(
+                        usernameState = UsernameState().apply {
+                            text = event.text
+                            validate()
+                        }
+                    )
+                }
+            }
+            is AuthContract.Event.OnPasswordEntering -> {
+                setState {
+                    copy(
+                        passwordState = PasswordState().apply {
+                            text = event.text
+                            validate()
+                        }
+                    )
+                }
             }
         }
     }
