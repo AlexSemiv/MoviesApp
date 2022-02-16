@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +24,8 @@ fun Username(
     username: String,
     error: String?,
     onUsernameChanged: (String) -> Unit,
-    onImeAction: () -> Unit
+    onImeAction: () -> Unit,
+    onClearClick: () -> Unit
 ) {
     Column {
         TextField(
@@ -42,6 +43,11 @@ fun Username(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
+            trailingIcon = {
+              IconButton(onClick = { onClearClick() }) {
+                  Icon(imageVector = Icons.Default.Clear, contentDescription = "Clean")
+              }
+            },
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Ascii,

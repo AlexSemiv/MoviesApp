@@ -41,8 +41,7 @@ class AuthenticationViewModel @Inject constructor(
                 setState {
                     copy(
                         usernameState = UsernameState().apply {
-                            text = event.text
-                            validate()
+                            setTextValue(event.text)
                         }
                     )
                 }
@@ -51,9 +50,16 @@ class AuthenticationViewModel @Inject constructor(
                 setState {
                     copy(
                         passwordState = PasswordState().apply {
-                            text = event.text
-                            validate()
+                            setTextValue(event.text)
                         }
+                    )
+                }
+            }
+            is AuthContract.Event.OnClearTextFields -> {
+                setState {
+                    copy(
+                        usernameState = UsernameState(),
+                        passwordState = PasswordState()
                     )
                 }
             }

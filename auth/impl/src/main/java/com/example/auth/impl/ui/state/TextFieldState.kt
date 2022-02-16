@@ -6,13 +6,16 @@ import androidx.compose.runtime.setValue
 
 
 abstract class TextFieldState {
-    var text by mutableStateOf("")
-    var error by mutableStateOf<String?>(null)
-
     abstract fun isTextValid(text: String): Boolean
     abstract fun errorMessage(unputText: String): String
 
-    fun validate() {
+    var text by mutableStateOf("")
+        private set
+    var error by mutableStateOf<String?>(null)
+        private set
+
+    fun setTextValue(value: String) {
+        text = value
         error = if(isValid() || text.isEmpty()) null else errorMessage(text)
     }
 

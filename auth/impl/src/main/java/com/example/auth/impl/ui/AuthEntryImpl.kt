@@ -1,5 +1,6 @@
 package com.example.auth.impl.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +12,7 @@ import com.example.auth.impl.di.DaggerAuthComponent
 import com.example.auth.impl.ui.components.AuthScreen
 import com.example.common.Destinations
 import com.example.common.di.injectedViewModel
+import com.example.common.util.Constants.TAG
 import com.example.data.api.LocalDataProvider
 import javax.inject.Inject
 
@@ -32,6 +34,8 @@ class AuthEntryImpl @Inject constructor(): AuthEntry() {
         AuthScreen(
             modifier = Modifier.fillMaxSize(),
             viewModel = viewModel
-        )
+        ) { session ->
+            Log.i(TAG, "session: ${session.id}")
+        }
     }
 }

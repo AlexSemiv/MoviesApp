@@ -20,6 +20,7 @@ object AuthContract {
         data class OnPasswordEntering(
             val text: String
         ): Event()
+        object OnClearTextFields: Event()
     }
 
     sealed class Effect: UiEffect {
