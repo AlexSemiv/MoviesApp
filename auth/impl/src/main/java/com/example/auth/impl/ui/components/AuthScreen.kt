@@ -20,47 +20,28 @@ import com.example.common.ui.theme.MoviesAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
-/*
-@Preview(
-    showSystemUi = true
-)
-@Composable
-fun PreviewAuthScreen() {
-    MoviesAppTheme {
-        AuthScreen()
-    }
-}*/
-
-@Preview(
-    showSystemUi = true
-)
-@Composable
-fun PreviewLoadingAuthScreen() {
-    MoviesAppTheme {
-        LoadingAuthScreen()
-    }
-}
-
 @Composable
 fun AuthScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthenticationViewModel,
-    navigateFromLoginScreen: (Session) -> Unit = {}
+    navigateFromLoginScreen: (Session) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val usernameState = uiState.usernameState
     val passwordState = uiState.passwordState
-    val isSignButtonEnabled = usernameState.isValid && passwordState.isValid
+    val isLoading = uiState.authState is AuthContract.AuthState.Loading
+    val isSignButtonEnabled = usernameState.isValid && passwordState.isValid && !isLoading
 
     var shouldShowError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
+
     suspend fun showErrorMessage(text: String) {
+        // if(!shouldShowError) {}
+        // TODO("Move text to viewModel")
         errorText = text
-        if(!shouldShowError) {
-            shouldShowError = true
-            delay(3000L)
-            shouldShowError = false
-        }
+        shouldShowError = true
+        delay(3000L)
+        shouldShowError = false
     }
 
     LaunchedEffect(key1 = true) {
@@ -84,9 +65,10 @@ fun AuthScreen(
         }
     }
 
-    Box(
+    AnimatedShimmerBox(
         modifier = modifier
-    ) {
+    ) { animatedBrush, defaultBrush ->
+
         TopSlideAnimatedText(
             modifier = Modifier.align(TopCenter),
             text = errorText,
@@ -106,8 +88,15 @@ fun AuthScreen(
 
             val localFocusManager = LocalFocusManager.current
             Username(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = if(isLoading) animatedBrush else defaultBrush,
+                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                    ),
                 username = usernameState.text,
                 error = usernameState.error,
+                readOnly = isLoading,
                 onUsernameChanged = {
                     viewModel.setEvent(
                         AuthContract.Event.OnUsernameEntering(text = it)
@@ -117,16 +106,25 @@ fun AuthScreen(
                     localFocusManager.moveFocus(FocusDirection.Down)
                 },
                 onClearClick = {
-                    localFocusManager.clearFocus()
-                    viewModel.setEvent(
-                        AuthContract.Event.OnClearTextFields
-                    )
+                    if(!isLoading) {
+                        localFocusManager.clearFocus()
+                        viewModel.setEvent(
+                            AuthContract.Event.OnClearTextFields
+                        )
+                    }
                 }
             )
 
             Password(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = if(isLoading) animatedBrush else defaultBrush,
+                        shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp),
+                    ),
                 password = passwordState.text,
                 error = passwordState.error,
+                readOnly = isLoading,
                 onPasswordChanged = {
                     viewModel.setEvent(
                         AuthContract.Event.OnPasswordEntering(text = it)
@@ -146,6 +144,7 @@ fun AuthScreen(
             )
 
             SignInButton(
+                modifier = Modifier.fillMaxWidth(),
                 isEnabled = isSignButtonEnabled
             ) {
                 localFocusManager.clearFocus()
@@ -154,46 +153,6 @@ fun AuthScreen(
                         username = usernameState.text,
                         password = passwordState.text
                     )
-                )
-            }
-        }
-
-        if (uiState.authState is AuthContract.AuthState.Loading)
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(BottomCenter),
-                strokeWidth = 6.dp
-            )
-    }
-}
-
-@Composable
-fun LoadingAuthScreen(
-    modifier: Modifier = Modifier
-) {
-    AnimatedShimmerBox(
-        modifier = modifier
-    ) { brush ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    16.dp
-                )
-                .align(Alignment.Center),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            repeat(5) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = brush,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .height(32.dp)
-                        .padding(8.dp)
                 )
             }
         }

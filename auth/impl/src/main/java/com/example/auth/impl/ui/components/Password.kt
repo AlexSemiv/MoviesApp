@@ -20,8 +20,10 @@ import com.example.auth.impl.R
 
 @Composable
 fun Password(
+    modifier: Modifier = Modifier,
     password: String,
     error: String?,
+    readOnly: Boolean = false,
     onPasswordChanged: (String) -> Unit,
     onImeAction: () -> Unit
 ) {
@@ -30,10 +32,11 @@ fun Password(
     }
     Column {
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier,
             value = password,
             singleLine = true,
             maxLines = 1,
+            readOnly = readOnly,
             onValueChange = {
                 onPasswordChanged(it)
             },

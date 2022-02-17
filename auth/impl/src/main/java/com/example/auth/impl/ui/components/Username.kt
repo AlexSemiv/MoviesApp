@@ -21,16 +21,19 @@ import com.example.auth.impl.R
 
 @Composable
 fun Username(
+    modifier: Modifier = Modifier,
     username: String,
     error: String?,
+    readOnly: Boolean = false,
     onUsernameChanged: (String) -> Unit,
     onImeAction: () -> Unit,
     onClearClick: () -> Unit
 ) {
     Column {
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier,
             value = username,
+            readOnly = readOnly,
             singleLine = true,
             maxLines = 1,
             onValueChange = {

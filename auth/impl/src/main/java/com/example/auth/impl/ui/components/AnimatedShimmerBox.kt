@@ -13,12 +13,18 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun AnimatedShimmerBox(
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.(Brush) -> Unit
+    content: @Composable BoxScope.(animatedBrush: Brush, defaultBrush: Brush) -> Unit
 ) {
     val shimmerColors = listOf(
-        Color.LightGray.copy(alpha = 0.6f),
+        Color.LightGray.copy(alpha = 0.8f),
+        Color.LightGray.copy(alpha = 0.1f),
+        Color.LightGray.copy(alpha = 0.8f)
+    )
+
+    val defaultColors = listOf(
         Color.LightGray.copy(alpha = 0.2f),
-        Color.LightGray.copy(alpha = 0.6f)
+        Color.LightGray.copy(alpha = 0.1f),
+        Color.LightGray.copy(alpha = 0.2f)
     )
 
     val transition = rememberInfiniteTransition()
@@ -34,7 +40,7 @@ fun AnimatedShimmerBox(
         )
     )
 
-    val brush = Brush.linearGradient(
+    val animatedBrush = Brush.linearGradient(
         colors = shimmerColors,
         start = Offset.Zero,
         end = Offset(x = translateAnim, y = translateAnim)
@@ -43,6 +49,6 @@ fun AnimatedShimmerBox(
     Box(
         modifier = modifier
     ) {
-        content(brush)
+        content(animatedBrush, Brush.horizontalGradient(defaultColors))
     }
 }

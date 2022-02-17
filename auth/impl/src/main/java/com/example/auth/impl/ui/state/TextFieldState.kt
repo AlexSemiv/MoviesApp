@@ -18,6 +18,6 @@ abstract class TextFieldState {
     var error: String? = null
         private set
 
-    var isValid: Boolean = true
+    var isValid: Boolean = false
         private set
 }
