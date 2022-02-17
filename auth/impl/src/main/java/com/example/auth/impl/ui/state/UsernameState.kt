@@ -2,10 +2,10 @@ package com.example.auth.impl.ui.state
 
 class UsernameState : TextFieldState() {
     override fun isTextValid(text: String): Boolean {
-        return text.isNotBlank()
+        return text.isNotBlank() && !text.contains(' ')
     }
 
-    override fun errorMessage(unputText: String): String {
+    override fun errorMessage(input: String): String {
         return "Username is invalid."
     }
 }

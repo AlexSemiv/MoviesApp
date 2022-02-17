@@ -1,5 +1,6 @@
 package com.example.common.domain
 
+import org.json.JSONObject
 import retrofit2.Response
 import java.lang.IllegalStateException
 
@@ -13,12 +14,10 @@ interface Repository {
                 200 -> response.body()
                 else -> null
             }
-        } else throw IllegalStateException(
-            when(response.code()) {
-                401 -> "Invalid API key: You must be granted a valid key."
-                404 -> "The resource you requested could not be found."
-                else -> "Unknown error"
-            }
-        )
+        } else
+            throw IllegalStateException(
+                // TODO("Handle Json throw")
+                JSONObject(response.errorBody()?.string() ?: "").getString("status_message")
+            )
     }
 }

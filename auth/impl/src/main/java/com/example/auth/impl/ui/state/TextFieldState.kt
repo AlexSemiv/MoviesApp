@@ -1,23 +1,23 @@
 package com.example.auth.impl.ui.state
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import kotlin.properties.Delegates
 
 
 abstract class TextFieldState {
     abstract fun isTextValid(text: String): Boolean
-    abstract fun errorMessage(unputText: String): String
+    abstract fun errorMessage(input: String): String
 
-    var text by mutableStateOf("")
-        private set
-    var error by mutableStateOf<String?>(null)
-        private set
-
-    fun setTextValue(value: String) {
-        text = value
-        error = if(isValid() || text.isEmpty()) null else errorMessage(text)
+    var text: String by Delegates.observable(
+        initialValue = ""
+    ) { _, _, newValue ->
+        isValid = isTextValid(text)
+        error = if(isValid || newValue.isEmpty()) null else errorMessage(newValue)
     }
 
-    fun isValid() = isTextValid(text)
+    var error: String? = null
+        private set
+
+    var isValid: Boolean = true
+        private set
 }

@@ -1,19 +1,12 @@
 package com.example.auth.impl.ui.components
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -57,6 +50,7 @@ fun AuthScreen(
     val uiState by viewModel.uiState.collectAsState()
     val usernameState = uiState.usernameState
     val passwordState = uiState.passwordState
+    val isSignButtonEnabled = usernameState.isValid && passwordState.isValid
 
     var shouldShowError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
@@ -93,7 +87,7 @@ fun AuthScreen(
     Box(
         modifier = modifier
     ) {
-        SlideAnimatedText(
+        TopSlideAnimatedText(
             modifier = Modifier.align(TopCenter),
             text = errorText,
             isShown = shouldShowError
@@ -139,7 +133,7 @@ fun AuthScreen(
                     )
                 },
                 onImeAction = {
-                    if (usernameState.isValid() && passwordState.isValid()) {
+                    if (isSignButtonEnabled) {
                         localFocusManager.clearFocus()
                         viewModel.setEvent(
                             AuthContract.Event.OnAuthSubmit(
@@ -152,16 +146,16 @@ fun AuthScreen(
             )
 
             SignInButton(
-                isEnabled = usernameState.isValid() && passwordState.isValid()
+                isEnabled = isSignButtonEnabled
             ) {
-                viewModel.setEvent(AuthContract.Event.OnAuthSubmit(
+                localFocusManager.clearFocus()
+                viewModel.setEvent(
+                    AuthContract.Event.OnAuthSubmit(
                         username = usernameState.text,
                         password = passwordState.text
                     )
                 )
             }
-
-
         }
 
         if (uiState.authState is AuthContract.AuthState.Loading)

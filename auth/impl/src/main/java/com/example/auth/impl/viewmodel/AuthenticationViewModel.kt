@@ -41,7 +41,7 @@ class AuthenticationViewModel @Inject constructor(
                 setState {
                     copy(
                         usernameState = UsernameState().apply {
-                            setTextValue(event.text)
+                            text = event.text
                         }
                     )
                 }
@@ -50,7 +50,7 @@ class AuthenticationViewModel @Inject constructor(
                 setState {
                     copy(
                         passwordState = PasswordState().apply {
-                            setTextValue(event.text)
+                            text = event.text
                         }
                     )
                 }
