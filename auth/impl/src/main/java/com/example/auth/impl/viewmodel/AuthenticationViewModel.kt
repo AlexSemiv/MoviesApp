@@ -2,6 +2,8 @@ package com.example.auth.impl.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.example.auth.impl.contract.AuthContract
+import com.example.auth.impl.contract.AuthContract.Event.*
+import com.example.auth.impl.ui.state.ErrorTextState
 import com.example.auth.impl.ui.state.PasswordState
 import com.example.auth.impl.ui.state.UsernameState
 import com.example.common.di.annotation.FeatureScoped
@@ -9,8 +11,10 @@ import com.example.auth.impl.usecase.CreateSession
 import com.example.common.domain.BaseViewModel
 import com.example.common.domain.auth.Session
 import com.example.common.util.Resource
+import com.example.common.util.Resource.Error
+import com.example.common.util.Resource.Loading
+import com.example.common.util.Resource.Success
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -26,19 +30,20 @@ class AuthenticationViewModel @Inject constructor(
         return AuthContract.State(
             authState = AuthContract.AuthState.Idle,
             usernameState = UsernameState(),
-            passwordState = PasswordState()
+            passwordState = PasswordState(),
+            errorTextState = ErrorTextState()
         )
     }
 
     override fun handleEvent(event: AuthContract.Event) {
         when (event) {
-            is AuthContract.Event.OnAuthSubmit -> {
+            is OnAuthSubmit -> {
                 loginUser(
                     username = event.username,
                     password = event.password
                 )
             }
-            is AuthContract.Event.OnUsernameEntering -> {
+            is OnUsernameEntering -> {
                 setState {
                     copy(
                         usernameState = UsernameState().apply {
@@ -47,7 +52,7 @@ class AuthenticationViewModel @Inject constructor(
                     )
                 }
             }
-            is AuthContract.Event.OnPasswordEntering -> {
+            is OnPasswordEntering -> {
                 setState {
                     copy(
                         passwordState = PasswordState().apply {
@@ -56,11 +61,18 @@ class AuthenticationViewModel @Inject constructor(
                     )
                 }
             }
-            is AuthContract.Event.OnClearTextFields -> {
+            is OnClearTextFields -> {
                 setState {
                     copy(
                         usernameState = UsernameState(),
                         passwordState = PasswordState()
+                    )
+                }
+            }
+            is OnCloseErrorText -> {
+                setState {
+                    copy(
+                        errorTextState = ErrorTextState()
                     )
                 }
             }
@@ -76,7 +88,7 @@ class AuthenticationViewModel @Inject constructor(
                 username = username,
                 password = password
             )
-                .onStart { emit(Resource.Loading()) }
+                .onStart { emit(Loading()) }
                 .onEach {
                     handleData(it)
                 }
@@ -86,21 +98,26 @@ class AuthenticationViewModel @Inject constructor(
 
     private fun handleData(result: Resource<Session>) {
         when(result) {
-            is Resource.Loading -> {
+            is Loading -> {
                 setState {
                     copy(authState = AuthContract.AuthState.Loading)
                 }
             }
-            is Resource.Success -> {
+            is Success -> {
                 setState {
                     copy(authState = AuthContract.AuthState.Success(session = result.data))
                 }
             }
-            is Resource.Error -> {
+            is Error -> {
                 setState {
-                    copy(authState = AuthContract.AuthState.Error)
+                    copy(
+                        authState = AuthContract.AuthState.Error,
+                        errorTextState = ErrorTextState(
+                            text = result.message,
+                            isShown = true
+                        )
+                    )
                 }
-                setEffect(AuthContract.Effect.ShowError(message = result.message))
             }
         }
     }

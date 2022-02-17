@@ -29,30 +29,10 @@ fun AuthScreen(
     val uiState by viewModel.uiState.collectAsState()
     val usernameState = uiState.usernameState
     val passwordState = uiState.passwordState
+    val errorTextState = uiState.errorTextState
+
     val isLoading = uiState.authState is AuthContract.AuthState.Loading
     val isSignButtonEnabled = usernameState.isValid && passwordState.isValid && !isLoading
-
-    var shouldShowError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
-
-    suspend fun showErrorMessage(text: String) {
-        // if(!shouldShowError) {}
-        // TODO("Move text to viewModel")
-        errorText = text
-        shouldShowError = true
-        delay(3000L)
-        shouldShowError = false
-    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.effect.collectLatest {
-            when(it) {
-                is AuthContract.Effect.ShowError -> {
-                    showErrorMessage(it.message)
-                }
-            }
-        }
-    }
 
     LaunchedEffect(key1 = true) {
         viewModel.uiState.collectLatest {
@@ -70,17 +50,23 @@ fun AuthScreen(
     ) { animatedBrush, defaultBrush ->
 
         TopSlideAnimatedText(
-            modifier = Modifier.align(TopCenter),
-            text = errorText,
-            isShown = shouldShowError
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp)
+                .align(TopCenter),
+            text = errorTextState.text,
+            isShown = errorTextState.isShown,
+            onCloseClick = {
+                viewModel.setEvent(
+                    AuthContract.Event.OnCloseErrorText
+                )
+            }
         )
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    16.dp
-                )
+                .padding(start = 16.dp, end = 16.dp)
                 .align(Alignment.Center),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {

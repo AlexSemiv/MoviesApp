@@ -1,5 +1,6 @@
 package com.example.auth.impl.contract
 
+import com.example.auth.impl.ui.state.ErrorTextState
 import com.example.auth.impl.ui.state.PasswordState
 import com.example.auth.impl.ui.state.UsernameState
 import com.example.common.domain.UiEffect
@@ -21,6 +22,7 @@ object AuthContract {
             val text: String
         ): Event()
         object OnClearTextFields: Event()
+        object OnCloseErrorText: Event()
     }
 
     sealed class Effect: UiEffect {
@@ -39,6 +41,7 @@ object AuthContract {
     data class State(
         val authState: AuthState,
         val usernameState: UsernameState,
-        val passwordState: PasswordState
+        val passwordState: PasswordState,
+        val errorTextState: ErrorTextState
     ): UiState
 }
